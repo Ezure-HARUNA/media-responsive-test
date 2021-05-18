@@ -5,8 +5,8 @@ import Sitagaki from './components/Sitagaki'
 const App = () => {
   return (
     <div>
-      {/* <CategoryBar /> */}
-      <Sitagaki />
+      <CategoryBar />
+      {/* <Sitagaki /> */}
     </div>
   )
 }

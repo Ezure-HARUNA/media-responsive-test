@@ -2,6 +2,7 @@
 /** @jsx jsx */
 import { jsx, css } from '@emotion/react';
 import React from 'react';
+import clsx from 'clsx';
 import PropTypes from 'prop-types';
 import AppBar from '@material-ui/core/AppBar';
 import CssBaseline from '@material-ui/core/CssBaseline';
@@ -93,10 +94,13 @@ function ResponsiveDrawer(props) {
   const { window } = props;
   const classes = useStyles();
   const theme = useTheme();
-  const [mobileOpen, setMobileOpen] = React.useState(false);
+  const [open, setOpen] = React.useState(false);
 
-  const handleDrawerToggle = () => {
-    setMobileOpen(!mobileOpen);
+  const handleDrawerOpen = () => {
+    setOpen(true);
+  };
+  const handleDrawerClose = () => {
+    setOpen(false);
   };
 
   const drawer = (
@@ -130,19 +134,19 @@ function ResponsiveDrawer(props) {
       <CssBaseline />
       <AppBar position="fixed" className={classes.appBar}>
         <Toolbar>
+        <img src={LogoImg} css={logoImg}/>
           <IconButton
             color="inherit"
             aria-label="open drawer"
-            edge="start"
-            onClick={handleDrawerToggle}
-            className={classes.menuButton}
+            edge="end"
+            onClick={handleDrawerOpen}
+            className={clsx(open && classes.hide)}
           >
             <MenuIcon />
           </IconButton>
           {/* <Typography variant="h6" noWrap>
             Responsive drawer
           </Typography> */}
-          <img src={LogoImg} css={logoImg}/>
         </Toolbar>
       </AppBar>
       <nav className={classes.drawer} aria-label="mailbox folders">
@@ -152,8 +156,8 @@ function ResponsiveDrawer(props) {
             container={container}
             variant="temporary"
             anchor={theme.direction === 'rtl' ? 'right' : 'left'}
-            open={mobileOpen}
-            onClose={handleDrawerToggle}
+            open={open}
+            onClose={handleDrawerClose}
             classes={{
               paper: classes.drawerPaper,
             }}
