@@ -1,3 +1,6 @@
+/** @jsxRuntime classic */
+/** @jsx jsx */
+import { jsx, css } from '@emotion/react';
 import React from 'react';
 import PropTypes from 'prop-types';
 import AppBar from '@material-ui/core/AppBar';
@@ -16,7 +19,17 @@ import MenuIcon from '@material-ui/icons/Menu';
 import Toolbar from '@material-ui/core/Toolbar';
 import Typography from '@material-ui/core/Typography';
 import { makeStyles, useTheme, createMuiTheme } from '@material-ui/core/styles';
-import createBreakpoints from '@material-ui/core/styles/createBreakpoints'
+import createBreakpoints from '@material-ui/core/styles/createBreakpoints';
+import LogoImg from '../assets/img/logo.png';
+
+
+const logoImg = css({
+  width: '9.8rem',
+  height:'auto',
+  '@media(min-width: 1100px)': {
+    width:'13.3rem',
+  }
+})
 
 const drawerWidth = 240;
 
@@ -126,9 +139,10 @@ function ResponsiveDrawer(props) {
           >
             <MenuIcon />
           </IconButton>
-          <Typography variant="h6" noWrap>
+          {/* <Typography variant="h6" noWrap>
             Responsive drawer
-          </Typography>
+          </Typography> */}
+          <img src={LogoImg} css={logoImg}/>
         </Toolbar>
       </AppBar>
       <nav className={classes.drawer} aria-label="mailbox folders">
