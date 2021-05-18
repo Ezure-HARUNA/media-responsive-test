@@ -1,185 +1,200 @@
 /** @jsxRuntime classic */
 /** @jsx jsx */
 import { jsx, css } from '@emotion/react';
-import React from 'react';
-import clsx from 'clsx';
-import { makeStyles, useTheme } from '@material-ui/core/styles';
-import Drawer from '@material-ui/core/Drawer';
-import AppBar from '@material-ui/core/AppBar';
-import Toolbar from '@material-ui/core/Toolbar';
-import CssBaseline from '@material-ui/core/CssBaseline';
-import List from '@material-ui/core/List';
-import Typography from '@material-ui/core/Typography';
-import Divider from '@material-ui/core/Divider';
-import IconButton from '@material-ui/core/IconButton';
-import MenuIcon from '@material-ui/icons/Menu';
-import ChevronLeftIcon from '@material-ui/icons/ChevronLeft';
-import ChevronRightIcon from '@material-ui/icons/ChevronRight';
-import ListItem from '@material-ui/core/ListItem';
-import ListItemIcon from '@material-ui/core/ListItemIcon';
-import ListItemText from '@material-ui/core/ListItemText';
-import InboxIcon from '@material-ui/icons/MoveToInbox';
-import MailIcon from '@material-ui/icons/Mail';
+import {
+  AppBar,
+  Toolbar,
+  Typography,
+  makeStyles,
+  Button,
+  IconButton,
+  Drawer,
+  Link,
+  MenuItem
+} from "@material-ui/core";
+import MenuIcon from "@material-ui/icons/Menu";
+import React, { useState, useEffect } from "react";
+// import { Link as RouterLink } from "react-router-dom";
+import LogoImg from '../assets/img/logo.png';
 
-const drawerWidth = 240;
+const navWrap = css({
+  backGroundColor: '#222222',
+  display: 'flex',
+  height: '6.0rem',
+  width: '94.4%',
+  justifyContent: 'space-between',
+  margin: '0 auto',
+})
 
-const useStyles = makeStyles((theme) => ({
-  root: {
-    display: 'flex',
+const logoImg = css({
+  width: '9.8rem',
+  height:'auto',
+  '@media(min-width: 480px)': {
+    width:'13.3rem',
+  }
+})
+
+const headersData = [
+  {
+    label: "イベント",
+    href: "/listings"
   },
-  appBar: {
-    transition: theme.transitions.create(['margin', 'width'], {
-      easing: theme.transitions.easing.sharp,
-      duration: theme.transitions.duration.leavingScreen,
-    }),
+  {
+    label: "インターン",
+    href: "/mentors"
   },
-  appBarShift: {
-    width: `calc(100% - ${drawerWidth}px)`,
-    transition: theme.transitions.create(['margin', 'width'], {
-      easing: theme.transitions.easing.easeOut,
-      duration: theme.transitions.duration.enteringScreen,
-    }),
-    marginRight: drawerWidth,
+  {
+    label: "会社概要",
+    href: "/account"
   },
-  title: {
-    flexGrow: 1,
+  {
+    label: "LINE追加",
+    href: "/logout"
+  }
+];
+
+const useStyles = makeStyles(() => ({
+  header: {
+    backgroundColor: "#222222",
+    paddingRight: "79px",
+    paddingLeft: "118px",
+    "@media (max-width: 480px)": {
+      paddingLeft: 0
+    }
   },
-  hide: {
-    display: 'none',
+  logo: {
+    fontFamily: "Work Sans, sans-serif",
+    fontWeight: 600,
+    color: "#FFFEFE",
+    textAlign: "left"
   },
-  drawer: {
-    width: drawerWidth,
-    flexShrink: 0,
+  menuButton: {
+    fontFamily: "Open Sans, sans-serif",
+    fontWeight: 700,
+    size: "18px",
+    marginLeft: "38px"
   },
-  drawerPaper: {
-    width: drawerWidth,
+  toolbar: {
+    display: "flex",
+    justifyContent: "space-between"
   },
-  drawerHeader: {
-    display: 'flex',
-    alignItems: 'center',
-    padding: theme.spacing(0, 1),
-    // necessary for content to be below app bar
-    ...theme.mixins.toolbar,
-    justifyContent: 'flex-start',
-  },
-  content: {
-    flexGrow: 1,
-    padding: theme.spacing(3),
-    transition: theme.transitions.create('margin', {
-      easing: theme.transitions.easing.sharp,
-      duration: theme.transitions.duration.leavingScreen,
-    }),
-    marginRight: -drawerWidth,
-  },
-  contentShift: {
-    transition: theme.transitions.create('margin', {
-      easing: theme.transitions.easing.easeOut,
-      duration: theme.transitions.duration.enteringScreen,
-    }),
-    marginRight: 0,
-  },
+  drawerContainer: {
+    padding: "20px 30px"
+  }
 }));
 
-export default function PersistentDrawerRight() {
-  const classes = useStyles();
-  const theme = useTheme();
-  const [open, setOpen] = React.useState(false);
+export default function Header() {
+  const { header, logo, menuButton, toolbar, drawerContainer } = useStyles();
 
-  const handleDrawerOpen = () => {
-    setOpen(true);
+  const [state, setState] = useState({
+    mobileView: false,
+    drawerOpen: false
+  });
+
+  const { mobileView, drawerOpen } = state;
+
+  useEffect(() => {
+    const setResponsiveness = () => {
+      return window.innerWidth < 480
+        ? setState((prevState) => ({ ...prevState, mobileView: true }))
+        : setState((prevState) => ({ ...prevState, mobileView: false }));
+    };
+
+    setResponsiveness();
+
+    window.addEventListener("resize", () => setResponsiveness());
+  }, []);
+
+  const displayDesktop = () => {
+    return (
+      <Toolbar className={toolbar}>
+        {femmecubatorLogo}
+        <div>{getMenuButtons()}</div>
+      </Toolbar>
+    );
   };
 
-  const handleDrawerClose = () => {
-    setOpen(false);
+  const displayMobile = () => {
+    const handleDrawerOpen = () =>
+      setState((prevState) => ({ ...prevState, drawerOpen: true }));
+    const handleDrawerClose = () =>
+      setState((prevState) => ({ ...prevState, drawerOpen: false }));
+
+    return (
+      <Toolbar css={navWrap}>
+        <IconButton
+          {...{
+            edge: "start",
+            color: "inherit",
+            "aria-label": "menu",
+            "aria-haspopup": "true",
+            onClick: handleDrawerOpen
+          }}
+        >
+          <MenuIcon />
+        </IconButton>
+
+        <Drawer
+          {...{
+            anchor: "left",
+            open: drawerOpen,
+            onClose: handleDrawerClose
+          }}
+        >
+          {/* <div className={drawerContainer}>{getDrawerChoices()}</div> */}
+        </Drawer>
+
+        {/* <div>{femmecubatorLogo}</div> */}
+        <img src={LogoImg} css={logoImg}/>
+      </Toolbar>
+    );
+  };
+
+  // const getDrawerChoices = () => {
+  //   return headersData.map(({ label, href }) => {
+  //     return (
+  //       <Link
+  //         {...{
+  //           component: RouterLink,
+  //           to: href,
+  //           color: "inherit",
+  //           style: { textDecoration: "none" },
+  //           key: label
+  //         }}
+  //       >
+  //         <MenuItem>{label}</MenuItem>
+  //       </Link>
+  //     );
+  //   });
+  // };
+
+  const femmecubatorLogo = (
+    <img src={LogoImg} css={logoImg}/>
+  );
+
+  const getMenuButtons = () => {
+    return headersData.map(({ label, href }) => {
+      return (
+        <Button
+          {...{
+            key: label,
+            color: "inherit",
+            to: href,
+            // component: RouterLink,
+            className: menuButton
+          }}
+        >
+          {label}
+        </Button>
+      );
+    });
   };
 
   return (
-    <div className={classes.root}>
-      <CssBaseline />
-      <AppBar
-        position="fixed"
-        className={clsx(classes.appBar, {
-          [classes.appBarShift]: open,
-        })}
-      >
-        <Toolbar>
-          <Typography variant="h6" noWrap className={classes.title}>
-            Persistent drawer
-          </Typography>
-          <IconButton
-            color="inherit"
-            aria-label="open drawer"
-            edge="end"
-            onClick={handleDrawerOpen}
-            className={clsx(open && classes.hide)}
-          >
-            <MenuIcon />
-          </IconButton>
-        </Toolbar>
+    <header>
+      <AppBar className={header}>
+        {mobileView ? displayMobile() : displayDesktop()}
       </AppBar>
-      <main
-        className={clsx(classes.content, {
-          [classes.contentShift]: open,
-        })}
-      >
-        <div className={classes.drawerHeader} />
-        <Typography paragraph>
-          Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt
-          ut labore et dolore magna aliqua. Rhoncus dolor purus non enim praesent elementum
-          facilisis leo vel. Risus at ultrices mi tempus imperdiet. Semper risus in hendrerit
-          gravida rutrum quisque non tellus. Convallis convallis tellus id interdum velit laoreet id
-          donec ultrices. Odio morbi quis commodo odio aenean sed adipiscing. Amet nisl suscipit
-          adipiscing bibendum est ultricies integer quis. Cursus euismod quis viverra nibh cras.
-          Metus vulputate eu scelerisque felis imperdiet proin fermentum leo. Mauris commodo quis
-          imperdiet massa tincidunt. Cras tincidunt lobortis feugiat vivamus at augue. At augue eget
-          arcu dictum varius duis at consectetur lorem. Velit sed ullamcorper morbi tincidunt. Lorem
-          donec massa sapien faucibus et molestie ac.
-        </Typography>
-        <Typography paragraph>
-          Consequat mauris nunc congue nisi vitae suscipit. Fringilla est ullamcorper eget nulla
-          facilisi etiam dignissim diam. Pulvinar elementum integer enim neque volutpat ac
-          tincidunt. Ornare suspendisse sed nisi lacus sed viverra tellus. Purus sit amet volutpat
-          consequat mauris. Elementum eu facilisis sed odio morbi. Euismod lacinia at quis risus sed
-          vulputate odio. Morbi tincidunt ornare massa eget egestas purus viverra accumsan in. In
-          hendrerit gravida rutrum quisque non tellus orci ac. Pellentesque nec nam aliquam sem et
-          tortor. Habitant morbi tristique senectus et. Adipiscing elit duis tristique sollicitudin
-          nibh sit. Ornare aenean euismod elementum nisi quis eleifend. Commodo viverra maecenas
-          accumsan lacus vel facilisis. Nulla posuere sollicitudin aliquam ultrices sagittis orci a.
-        </Typography>
-      </main>
-      <Drawer
-        className={classes.drawer}
-        variant="persistent"
-        anchor="right"
-        open={open}
-        classes={{
-          paper: classes.drawerPaper,
-        }}
-      >
-        <div className={classes.drawerHeader}>
-          <IconButton onClick={handleDrawerClose}>
-            {theme.direction === 'rtl' ? <ChevronLeftIcon /> : <ChevronRightIcon />}
-          </IconButton>
-        </div>
-        <Divider />
-        <List>
-          {['Inbox', 'Starred', 'Send email', 'Drafts'].map((text, index) => (
-            <ListItem button key={text}>
-              <ListItemIcon>{index % 2 === 0 ? <InboxIcon /> : <MailIcon />}</ListItemIcon>
-              <ListItemText primary={text} />
-            </ListItem>
-          ))}
-        </List>
-        <Divider />
-        <List>
-          {['All mail', 'Trash', 'Spam'].map((text, index) => (
-            <ListItem button key={text}>
-              <ListItemIcon>{index % 2 === 0 ? <InboxIcon /> : <MailIcon />}</ListItemIcon>
-              <ListItemText primary={text} />
-            </ListItem>
-          ))}
-        </List>
-      </Drawer>
-    </div>
+    </header>
   );
 }
