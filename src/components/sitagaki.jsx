@@ -100,8 +100,11 @@ const nav = css({
 });
 
 const logoImg = css({
-  width:'13.3rem',
+  width:'9.8rem',
   height:'auto',
+  '@media(min-width: 480px)': {
+    width:'13.3rem',
+  }
 })
 
 const navLinkWrap = css({
