@@ -6,13 +6,13 @@ import {
   Button,
   IconButton,
   Drawer,
-  Link,
+  // Link,
   MenuItem,
   useTheme,
 } from "@material-ui/core";
 import MenuIcon from "@material-ui/icons/Menu";
 import React, { useState, useEffect } from "react";
-import { Link  } from "react-router-dom";
+import { 　Link  } from "react-router-dom";
 
 /** @jsxRuntime classic */
 /** @jsx jsx */
@@ -28,62 +28,173 @@ import ListItemIcon from '@material-ui/core/ListItemIcon';
 import ListItemText from '@material-ui/core/ListItemText';
 import InboxIcon from '@material-ui/icons/MoveToInbox';
 import MailIcon from '@material-ui/icons/Mail';
-import LogoImg from '../../assets/img/logo.png';
+import LogoImg from '../assets/img/logo.png';
 // import { Link } from 'react-router-dom';
 
-//いらない
-const headersData = [
-  {
-    label: "Listings",
-    href: "/listings",
-  },
-  {
-    label: "Mentors",
-    href: "/mentors",
-  },
-  {
-    label: "My Account",
-    href: "/account",
-  },
-  {
-    label: "Log Out",
-    href: "/logout",
-  },
-];
+const drawerWidth = 240;
 
-//いらない
-const useStyles = makeStyles(() => ({
-  header: {
-    backgroundColor: "#400CCC",
-    paddingRight: "79px",
-    paddingLeft: "118px",
-    "@media (max-width: 900px)": {
-      paddingLeft: 0,
-    },
+const useStyles = makeStyles((theme) => ({
+  root: {
+    display: 'flex',
   },
-  logo: {
-    fontFamily: "Work Sans, sans-serif",
-    fontWeight: 600,
-    color: "#FFFEFE",
-    textAlign: "left",
+  appBar: {
+    transition: theme.transitions.create(['margin', 'width'], {
+      easing: theme.transitions.easing.sharp,
+      duration: theme.transitions.duration.leavingScreen,
+    }),
+    backgroundColor: 'black',
   },
-  menuButton: {
-    fontFamily: "Open Sans, sans-serif",
-    fontWeight: 700,
-    size: "18px",
-    marginLeft: "38px",
+  appBarShift: {
+    width: `calc(100% - ${drawerWidth}px)`,
+    transition: theme.transitions.create(['margin', 'width'], {
+      easing: theme.transitions.easing.easeOut,
+      duration: theme.transitions.duration.enteringScreen,
+    }),
+    marginRight: drawerWidth,
   },
-  toolbar: {
-    display: "flex",
-    justifyContent: "space-between",
+  title: {
+    flexGrow: 1,
   },
-  drawerContainer: {
-    padding: "20px 30px",
+  hide: {
+    display: 'none',
+  },
+  drawer: {
+    width: drawerWidth,
+    flexShrink: 0,
+  },
+  drawerPaper: {
+    width: drawerWidth,
+  },
+  drawerHeader: {
+    display: 'flex',
+    alignItems: 'center',
+    padding: theme.spacing(0, 1),
+    // necessary for content to be below app bar
+    ...theme.mixins.toolbar,
+    justifyContent: 'flex-start',
+  },
+  content: {
+    flexGrow: 1,
+    padding: theme.spacing(3),
+    transition: theme.transitions.create('margin', {
+      easing: theme.transitions.easing.sharp,
+      duration: theme.transitions.duration.leavingScreen,
+    }),
+    marginRight: -drawerWidth,
+  },
+  contentShift: {
+    transition: theme.transitions.create('margin', {
+      easing: theme.transitions.easing.easeOut,
+      duration: theme.transitions.duration.enteringScreen,
+    }),
+    marginRight: 0,
   },
 }));
 
+
+const navWrap = css({
+  backgroundColor: '#020202',
+  height: '8.0rem',
+  width: '100%',
+  position: 'fixed',
+});
+
+const nav = css({
+  display: 'flex',
+  height: '8.0rem',
+  justifyContent: 'space-between',
+  alignItems: 'center',
+  maxWidth: '1040px',
+  margin: '0 auto'
+});
+
+const logoImg = css({
+  width:'13.3rem',
+  height:'auto',
+})
+
+const navLinkWrap = css({
+  display: 'flex',
+});
+
+const navLi = css({
+  textDecoration: 'none',
+  listStyle: 'none',
+  marginRight: '35px',
+  '&:last-child': {	
+    marginRight: '0'
+  }
+});
+
+const navLink = css({
+  color: '#ffffff',
+  textDecoration: 'none',
+  fontFamily: 'Roboto',
+  fontStyle: 'normal',
+  fontWeight: 'normal',
+  fontSize: '1.6rem',
+  lineHeight: '1.9rem',
+  display: 'flex',
+  alignItems: 'center',
+  letterSpacing: 0.15,
+})
+
+//いらない
+// const headersData = [
+//   {
+//     label: "Listings",
+//     href: "/listings",
+//   },
+//   {
+//     label: "Mentors",
+//     href: "/mentors",
+//   },
+//   {
+//     label: "My Account",
+//     href: "/account",
+//   },
+//   {
+//     label: "Log Out",
+//     href: "/logout",
+//   },
+// ];
+
+//いらない
+// const useStyles = makeStyles(() => ({
+//   header: {
+//     backgroundColor: "#400CCC",
+//     paddingRight: "79px",
+//     paddingLeft: "118px",
+//     "@media (max-width: 900px)": {
+//       paddingLeft: 0,
+//     },
+//   },
+//   logo: {
+//     fontFamily: "Work Sans, sans-serif",
+//     fontWeight: 600,
+//     color: "#FFFEFE",
+//     textAlign: "left",
+//   },
+//   menuButton: {
+//     fontFamily: "Open Sans, sans-serif",
+//     fontWeight: 700,
+//     size: "18px",
+//     marginLeft: "38px",
+//   },
+//   toolbar: {
+//     display: "flex",
+//     justifyContent: "space-between",
+//   },
+//   drawerContainer: {
+//     padding: "20px 30px",
+//   },
+// }));
+
 // ここだけ残す
-export default function Header() {
+const NavBar = () => {
+  const classes = useStyles();
+
+  const theme = useTheme();
   const { header, logo, menuButton, toolbar, drawerContainer } = useStyles();
 
   const [state, setState] = useState({
@@ -93,9 +204,19 @@ export default function Header() {
 
   const { mobileView, drawerOpen } = state;
 
+  const [open, setOpen] = useState(false);
+
+  const handleDrawerOpen = () => {
+    setOpen(true);
+  };
+
+  const handleDrawerClose = () => {
+    setOpen(false);
+  };
+
   useEffect(() => {
     const setResponsiveness = () => {
-      return window.innerWidth < 480 
+      return window.innerWidth < 600 
         ? setState((prevState) => ({ ...prevState, mobileView: true }))
         : setState((prevState) => ({ ...prevState, mobileView: false }));
     };
@@ -109,47 +230,119 @@ export default function Header() {
   //ここにPC版の見た目
   const displayDesktop = () => {
     return (
-      {/* ここにPC版の見た目 */}
-      <Toolbar className={toolbar}>
-        {femmecubatorLogo}
-        <div>{getMenuButtons()}</div>
-      </Toolbar>
+      <div css={navWrap}>
+        <div css={nav}>
+          <Link to='/'>
+            <img src={LogoImg} css={logoImg}/>
+          </Link>
+          <ul css={navLinkWrap}>
+            <li css={navLi}>
+              <Link css={navLink} to='/event'>
+                イベント
+              </Link>
+            </li>
+            <li css={navLi}>
+              <Link css={navLink} to='/intern'>
+                インターン
+              </Link>
+            </li>
+            <li css={navLi}>
+              <Link css={navLink} to='/about'>
+                会社概要
+              </Link>
+            </li>
+            <li css={navLi}>
+              <Link css={navLink} to='/'>
+                LINE追加
+              </Link>
+            </li>
+          </ul>
+        </div>
+      </div>
     );
   };
   //ここにSP版の見た目
   const displayMobile = () => {
-    const handleDrawerOpen = () =>
-      setState((prevState) => ({ ...prevState, drawerOpen: true }));
-    const handleDrawerClose = () =>
-      setState((prevState) => ({ ...prevState, drawerOpen: false }));
+    // const handleDrawerOpen = () =>
+    //   setState((prevState) => ({ ...prevState, drawerOpen: true }));
+    // const handleDrawerClose = () =>
+    //   setState((prevState) => ({ ...prevState, drawerOpen: false }));
 
-    return (
-      <Toolbar>
-        <IconButton
-          {...{
-            edge: "start",
-            color: "inherit",
-            "aria-label": "menu",
-            "aria-haspopup": "true",
-            onClick: handleDrawerOpen,
-          }}
-        >
-          <MenuIcon />
-        </IconButton>
+    
+  // const [open, setOpen] = useState(false);
 
-        <Drawer
-          {...{
-            anchor: "left",
-            open: drawerOpen,
-            onClose: handleDrawerClose,
-          }}
-        >
-          {/* <div className={drawerContainer}>{getDrawerChoices()}</div> */}
-        </Drawer>
+  // const handleDrawerOpen = () => {
+  //   setOpen(true);
+  // };
 
-        <div>{femmecubatorLogo}</div>
-      </Toolbar>
-    );
+  // const handleDrawerClose = () => {
+  //   setOpen(false);
+  // };
+
+      return (
+        <div className={classes.root}>
+          <CssBaseline />
+          <AppBar
+            position="fixed"
+            className={clsx(classes.appBar, {
+              [classes.appBarShift]: open,
+            })}
+          >
+            <Toolbar css={navWrap}>
+            <img src={LogoImg} css={logoImg}/>
+              <IconButton
+                color="inherit"
+                aria-label="open drawer"
+                edge="end"
+                onClick={handleDrawerOpen}
+                className={clsx(open && classes.hide)}
+              >
+                <MenuIcon style={{ fontSize: 40 }} />
+              </IconButton>
+            </Toolbar>
+          </AppBar>
+          <main
+            className={clsx(classes.content, {
+              [classes.contentShift]: open,
+            })}
+          >
+            {/* <div className={classes.drawerHeader} /> */}
+          </main>
+          <Drawer
+            className={classes.drawer}
+            variant="persistent"
+            anchor="right"
+            open={open}
+            classes={{
+              paper: classes.drawerPaper,
+            }}
+          >
+            <div className={classes.drawerHeader}>
+              <IconButton onClick={handleDrawerClose}>
+                {theme.direction === 'rtl' ? <ChevronLeftIcon /> : <ChevronRightIcon />}
+              </IconButton>
+            </div>
+            <Divider />
+            <List>
+              {['イベント', 'インターン', '会社概要', 'LINE追加'].map((text, index) => (
+                <ListItem button key={text}>
+                  {/* <ListItemIcon>{index % 2 === 0 ? <InboxIcon /> : <MailIcon />}</ListItemIcon> */}
+                  <ListItemText primary={text} margin="0 auto"/>
+                </ListItem>
+              ))}
+            </List>
+            {/* <Divider />
+            <List>
+              {['', 'Trash', 'Spam'].map((text, index) => (
+                <ListItem button key={text}>
+                  <ListItemIcon>{index % 2 === 0 ? <InboxIcon /> : <MailIcon />}</ListItemIcon>
+                  <ListItemText primary={text} />
+                </ListItem>
+              ))}
+            </List> */}
+          </Drawer>
+        </div>
+      );
   };
 
   // const getDrawerChoices = () => {
@@ -178,23 +371,23 @@ export default function Header() {
   );
   
   //いらない
-  const getMenuButtons = () => {
-    return headersData.map(({ label, href }) => {
-      return (
-        <Button
-          {...{
-            key: label,
-            color: "inherit",
-            to: href,
-            // component: RouterLink,
-            className: menuButton,
-          }}
-        >
-          {label}
-        </Button>
-      );
-    });
-  };
+  // const getMenuButtons = () => {
+  //   return headersData.map(({ label, href }) => {
+  //     return (
+  //       <Button
+  //         {...{
+  //           key: label,
+  //           color: "inherit",
+  //           to: href,
+  //           // component: RouterLink,
+  //           className: menuButton,
+  //         }}
+  //       >
+  //         {label}
+  //       </Button>
+  //     );
+  //   });
+  // };
 
   return (
     <header>
@@ -204,3 +397,5 @@ export default function Header() {
     </header>
   );
 }
+
+export default NavBar;
