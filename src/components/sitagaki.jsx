@@ -1,6 +1,3 @@
-/** @jsxRuntime classic */
-/** @jsx jsx */
-import { jsx, css } from '@emotion/react';
 import {
   AppBar,
   Toolbar,
@@ -10,92 +7,95 @@ import {
   IconButton,
   Drawer,
   Link,
-  MenuItem
+  MenuItem,
+  useTheme,
 } from "@material-ui/core";
 import MenuIcon from "@material-ui/icons/Menu";
 import React, { useState, useEffect } from "react";
-// import { Link as RouterLink } from "react-router-dom";
-import LogoImg from '../assets/img/logo.png';
+import { Link  } from "react-router-dom";
 
-const navWrap = css({
-  backGroundColor: '#222222',
-  display: 'flex',
-  height: '6.0rem',
-  width: '94.4%',
-  justifyContent: 'space-between',
-  margin: '0 auto',
-})
+/** @jsxRuntime classic */
+/** @jsx jsx */
+import { jsx, css } from '@emotion/react';
+import clsx from 'clsx';
+import CssBaseline from '@material-ui/core/CssBaseline';
+import List from '@material-ui/core/List';
+import Divider from '@material-ui/core/Divider';
+import ChevronLeftIcon from '@material-ui/icons/ChevronLeft';
+import ChevronRightIcon from '@material-ui/icons/ChevronRight';
+import ListItem from '@material-ui/core/ListItem';
+import ListItemIcon from '@material-ui/core/ListItemIcon';
+import ListItemText from '@material-ui/core/ListItemText';
+import InboxIcon from '@material-ui/icons/MoveToInbox';
+import MailIcon from '@material-ui/icons/Mail';
+import LogoImg from '../../assets/img/logo.png';
+// import { Link } from 'react-router-dom';
 
-const logoImg = css({
-  width: '9.8rem',
-  height:'auto',
-  '@media(min-width: 480px)': {
-    width:'13.3rem',
-  }
-})
-
+//いらない
 const headersData = [
   {
-    label: "イベント",
-    href: "/listings"
+    label: "Listings",
+    href: "/listings",
   },
   {
-    label: "インターン",
-    href: "/mentors"
+    label: "Mentors",
+    href: "/mentors",
   },
   {
-    label: "会社概要",
-    href: "/account"
+    label: "My Account",
+    href: "/account",
   },
   {
-    label: "LINE追加",
-    href: "/logout"
-  }
+    label: "Log Out",
+    href: "/logout",
+  },
 ];
 
+//いらない
 const useStyles = makeStyles(() => ({
   header: {
-    backgroundColor: "#222222",
+    backgroundColor: "#400CCC",
     paddingRight: "79px",
     paddingLeft: "118px",
-    "@media (max-width: 480px)": {
-      paddingLeft: 0
-    }
+    "@media (max-width: 900px)": {
+      paddingLeft: 0,
+    },
   },
   logo: {
     fontFamily: "Work Sans, sans-serif",
     fontWeight: 600,
     color: "#FFFEFE",
-    textAlign: "left"
+    textAlign: "left",
   },
   menuButton: {
     fontFamily: "Open Sans, sans-serif",
     fontWeight: 700,
     size: "18px",
-    marginLeft: "38px"
+    marginLeft: "38px",
   },
   toolbar: {
     display: "flex",
-    justifyContent: "space-between"
+    justifyContent: "space-between",
   },
   drawerContainer: {
-    padding: "20px 30px"
-  }
+    padding: "20px 30px",
+  },
 }));
 
+// ここだけ残す
 export default function Header() {
   const { header, logo, menuButton, toolbar, drawerContainer } = useStyles();
 
   const [state, setState] = useState({
     mobileView: false,
-    drawerOpen: false
+    drawerOpen: false,
   });
 
   const { mobileView, drawerOpen } = state;
 
   useEffect(() => {
     const setResponsiveness = () => {
-      return window.innerWidth < 480
+      return window.innerWidth < 480 
         ? setState((prevState) => ({ ...prevState, mobileView: true }))
         : setState((prevState) => ({ ...prevState, mobileView: false }));
     };
@@ -105,15 +105,18 @@ export default function Header() {
     window.addEventListener("resize", () => setResponsiveness());
   }, []);
 
+
+  //ここにPC版の見た目
   const displayDesktop = () => {
     return (
+      {/* ここにPC版の見た目 */}
       <Toolbar className={toolbar}>
         {femmecubatorLogo}
         <div>{getMenuButtons()}</div>
       </Toolbar>
     );
   };
-
+  //ここにSP版の見た目
   const displayMobile = () => {
     const handleDrawerOpen = () =>
       setState((prevState) => ({ ...prevState, drawerOpen: true }));
@@ -121,14 +124,14 @@ export default function Header() {
       setState((prevState) => ({ ...prevState, drawerOpen: false }));
 
     return (
-      <Toolbar css={navWrap}>
+      <Toolbar>
         <IconButton
           {...{
             edge: "start",
             color: "inherit",
             "aria-label": "menu",
             "aria-haspopup": "true",
-            onClick: handleDrawerOpen
+            onClick: handleDrawerOpen,
           }}
         >
           <MenuIcon />
@@ -138,14 +141,13 @@ export default function Header() {
           {...{
             anchor: "left",
             open: drawerOpen,
-            onClose: handleDrawerClose
+            onClose: handleDrawerClose,
           }}
         >
           {/* <div className={drawerContainer}>{getDrawerChoices()}</div> */}
         </Drawer>
 
-        {/* <div>{femmecubatorLogo}</div> */}
-        <img src={LogoImg} css={logoImg}/>
+        <div>{femmecubatorLogo}</div>
       </Toolbar>
     );
   };
@@ -159,7 +161,7 @@ export default function Header() {
   //           to: href,
   //           color: "inherit",
   //           style: { textDecoration: "none" },
-  //           key: label
+  //           key: label,
   //         }}
   //       >
   //         <MenuItem>{label}</MenuItem>
@@ -168,10 +170,14 @@ export default function Header() {
   //   });
   // };
 
+  //いらない
   const femmecubatorLogo = (
-    <img src={LogoImg} css={logoImg}/>
+    <Typography variant="h6" component="h1" className={logo}>
+      Femmecubator
+    </Typography>
   );
-
+  
+  //いらない
   const getMenuButtons = () => {
     return headersData.map(({ label, href }) => {
       return (
@@ -181,7 +187,7 @@ export default function Header() {
             color: "inherit",
             to: href,
             // component: RouterLink,
-            className: menuButton
+            className: menuButton,
           }}
         >
           {label}

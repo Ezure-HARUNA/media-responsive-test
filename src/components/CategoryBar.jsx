@@ -168,19 +168,19 @@ export default function PersistentDrawerRight() {
           {['イベント', 'インターン', '会社概要', 'LINE追加'].map((text, index) => (
             <ListItem button key={text}>
               {/* <ListItemIcon>{index % 2 === 0 ? <InboxIcon /> : <MailIcon />}</ListItemIcon> */}
-              <ListItemText primary={text} />
+              <ListItemText primary={text} margin="0 auto"/>
             </ListItem>
           ))}
         </List>
-        {/* <Divider /> */}
-        {/* <List>
-          {['All mail', 'Trash', 'Spam'].map((text, index) => (
+        <Divider />
+        <List>
+          {['', 'Trash', 'Spam'].map((text, index) => (
             <ListItem button key={text}>
               <ListItemIcon>{index % 2 === 0 ? <InboxIcon /> : <MailIcon />}</ListItemIcon>
               <ListItemText primary={text} />
             </ListItem>
           ))}
-        </List> */}
+        </List>
       </Drawer>
     </div>
   );
